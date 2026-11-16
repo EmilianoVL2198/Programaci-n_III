@@ -1,5 +1,5 @@
 # Título: MetroGraph - Streamlit
-# Nombre: Emiliano Villalobos Luevano
+# Nombre del autor: Emiliano Villalobos Luevano
 # Fecha: 15 de noviembre de 2026
 # Descripción: Interfaz gráfica para gestionar redes de transporte
 
@@ -258,7 +258,7 @@ if seccion == "Constructor":
         except PermissionError as error:
             st.error(f"Permiso denegado: {error}")
 
-        except OSError as error:
+        except (OSError, UnicodeError, csv.Error) as error:
             st.error(f"Error al guardar la conexión: {error}")
 
 

@@ -18,8 +18,6 @@ from grafo import Grafo
 ARCHIVO_CSV = Path(__file__).resolve().parent / "nodos.csv"
 ENCABEZADOS = ["Origen", "Destino", "Peso"]
 
-'''Funciones para validar y manejar conexiones en archivos CSV'''
-
 
 def validar_nodo(nombre: str) -> str:
     '''Valida que el nombre del nodo no esté vacío'''

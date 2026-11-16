@@ -1,27 +1,86 @@
-# Proyecto 2 — Gestor de grafos con Dijkstra
+# 🚇 MetroGraph
+
+### Construye tu red. Encuentra tu camino.
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Frontend-FF4B4B?logo=streamlit&logoColor=white)
+![PEP8](https://img.shields.io/badge/Code%20Style-PEP8-brightgreen)
+![Version](https://img.shields.io/badge/Version-1.0-blue)
 
 ## Descripción
 
-Programa modular desarrollado en Python que permite registrar conexiones entre nodos de una red de grafos, almacenar la información en un archivo CSV y calcular la ruta más corta mediante el algoritmo de Dijkstra.
+MetroGraph es una aplicación web interactiva desarrollada en Python y Streamlit que permite construir, visualizar y optimizar redes de transporte personalizadas mediante la teoría de grafos y el algoritmo de Dijkstra.
 
-El proyecto reutiliza y adapta el algoritmo desarrollado en la Unidad 1, incorporando buenas prácticas de ingeniería de software.
+El proyecto surge de la evolución de las actividades realizadas durante la asignatura de Programación III, integrando estructuras de datos, persistencia de información, manejo de excepciones, programación modular y desarrollo de interfaces gráficas.
 
-## Estructura del proyecto
+## Funcionalidades
 
-- `main.py`: menú interactivo y coordinación de operaciones.
+### Constructor
+- Creación de estaciones y conexiones.
+- Asignación y actualización de pesos.
+- Validación de los datos ingresados.
+- Almacenamiento persistente mediante CSV.
+- Prevención de conexiones duplicadas.
+
+### Planificador
+- Cálculo de rutas óptimas mediante Dijkstra.
+- Visualización del costo mínimo.
+- Presentación de la secuencia del recorrido.
+- Resaltado gráfico de la ruta óptima.
+
+### Explorador
+- Visualización gráfica de la red.
+- Catálogo de conexiones mediante Pandas.
+- Indicadores de estaciones y conexiones registradas.
+
+## Tecnologías utilizadas
+
+| Tecnología | Propósito |
+|---|---|
+| Python | Lenguaje principal |
+| Streamlit | Interfaz gráfica web |
+| Pandas | Presentación tabular de datos |
+| NetworkX | Representación gráfica de la red |
+| Matplotlib | Visualización y personalización del grafo |
+| CSV | Persistencia de información |
+| Flake8 | Análisis estático y calidad de código |
+| Git y GitHub | Control de versiones |
+
+## Arquitectura
+
+El proyecto mantiene una arquitectura modular que separa la interfaz gráfica, la lógica de negocio y la persistencia de información.
+
+- `app.py`: interfaz gráfica desarrollada con Streamlit.
 - `grafo.py`: clases Nodo y Grafo e implementación de Dijkstra.
-- `io_handler.py`: validación, lectura y escritura de archivos CSV.
-- `nodos.csv`: almacenamiento persistente de conexiones.
-- `requirements.txt`: dependencia de desarrollo Flake8.
-- `README.md`: documentación del proyecto.
-
-## Requisitos
-
-- Python 3.10 o superior.
-- Flake8 para comprobar las buenas practicas en el código.
-- Todas las demás bibliotecas utilizadas son parte de la biblioteca estándar de Python y no requieren instalación adicional.
+- `io_handler.py`: validación, lectura y escritura de conexiones.
+- `main.py`: interfaz original de consola.
+- `nodos.csv`: almacenamiento persistente.
+- `.streamlit/config.toml`: configuración del tema visual.
+- `requirements.txt`: dependencias.
+- `.gitignore`: exclusión de archivos innecesarios.
+- `README.md`: documentación.
 
 ## Instalación
+
+Se requiere Python 3.10 o superior.
+
+Desde la carpeta del proyecto, crear un entorno virtual:
+
+```bash
+python3 -m venv .venv
+```
+
+Activar el entorno virtual en macOS o Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+En Windows:
+
+```bash
+.venv\Scripts\activate
+```
 
 Instalar las dependencias:
 
@@ -31,22 +90,27 @@ python -m pip install -r requirements.txt
 
 ## Ejecución
 
-Desde la carpeta del proyecto:
+Para iniciar la interfaz web:
+
+```bash
+python -m streamlit run app.py
+```
+
+Para utilizar la versión original de consola:
 
 ```bash
 python main.py
 ```
 
-## Funcionalidades
+## Gestión del estado
 
-1. Registrar nuevas conexiones entre nodos.
-2. Validar los datos ingresados por el usuario.
-3. Guardar las conexiones en `nodos.csv`.
-4. Reconstruir el grafo desde el archivo CSV.
-5. Calcular la ruta más corta mediante Dijkstra.
-6. Mostrar las conexiones registradas.
+MetroGraph utiliza `st.session_state` para almacenar el objeto Grafo en memoria RAM durante la sesión del usuario.
 
-## Formato CSV
+La carga inicial del archivo CSV se realiza una sola vez en una sesión iniciada correctamente. Las nuevas conexiones se guardan en disco y se actualizan directamente en el grafo en memoria, evitando lecturas redundantes.
+
+## Persistencia de datos
+
+Las conexiones se almacenan en el archivo `nodos.csv` utilizando la siguiente estructura:
 
 ```csv
 Origen,Destino,Peso
@@ -56,22 +120,57 @@ B,D,3
 C,D,1
 ```
 
-Las conexiones son bidireccionales y los pesos deben ser números finitos no negativos.
+La red es bidireccional y admite pesos numéricos finitos no negativos. Cuando una conexión ya existe, su peso se actualiza sin generar un registro duplicado.
 
-## Buenas prácticas
+## Manejo de excepciones
 
-El código utiliza anotaciones de tipo, docstrings, manejo de excepciones específicas, administradores de contexto `with` y programación modular.
+La aplicación incorpora excepciones específicas para gestionar entradas inválidas, estaciones inexistentes y errores relacionados con la lectura y escritura de archivos.
 
-## Verificación con Flake8
+Las notificaciones se presentan mediante alertas visuales en Streamlit.
+
+## Calidad de código
+
+El proyecto incorpora buenas prácticas de ingeniería de software:
+
+- Programación orientada a objetos.
+- Arquitectura modular.
+- Type hints y docstrings.
+- Manejo de excepciones específicas.
+- Estándar de estilo PEP 8.
+- Control de versiones mediante ramas.
+
+Para verificar la calidad del código:
 
 ```bash
-python -m flake8 main.py grafo.py io_handler.py
+python -m flake8 .
 ```
+
+## Alcance actual
+
+MetroGraph 1.0 está diseñado para administrar una sola red editable en un entorno de uso individual. No contempla todavía la edición concurrente por múltiples usuarios.
+
+## Mejoras futuras
+
+- Nodos interactivos y arrastrables.
+- Eliminación de estaciones y conexiones.
+- Administración de múltiples redes.
+- Importación y exportación de redes.
+- Migración hacia una arquitectura web más amplia.
 
 ## Autor
 
 Emiliano Villalobos Luevano
 
-## Asignatura
+Licenciatura en Inteligencia Artificial y Análisis de Datos.
 
-Programación III
+Programación III — Proyecto 3.
+
+2026.
+
+![Pantalla principal de la pagina](Constructor.png "Título opcional")
+
+
+![Pantalla para encontrar la ruta más optima](Planificador.png "Título opcional")
+
+
+![Pantalla para observar todas las rutas existentes](Explorador.png "Título opcional")
