@@ -1,10 +1,9 @@
-# Título: MetroGraph - Streamlit
-# Nombre: Emiliano Villalobos Luevano
+# Título: MetroGraph - Interfaz de consola
+# Nombre del autor: Emiliano Villalobos Luevano
 # Fecha: 15 de noviembre de 2026
-# Descripción: Programa modular desarrollado en Python que permite registrar conexiones entre nodos de una red de grafos,
-# almacenar la información en un archivo CSV y calcular la ruta más corta mediante el algoritmo de Dijkstra.
+# Descripción: Gestión de redes de transporte desde la terminal.
 
-'''Programa principal para gestionar la red de nodos'''
+"""Programa principal para gestionar la red de nodos."""
 
 import math
 

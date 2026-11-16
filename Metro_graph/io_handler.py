@@ -1,12 +1,12 @@
-# Título: MetroGraph - Streamlit
-# Nombre: Emiliano Villalobos Luevano
+# Título: Persistencia de datos de MetroGraph
+# Nombre del autor: Emiliano Villalobos Luevano
 # Fecha: 15 de noviembre de 2026
-# Descripción: Programa modular desarrollado en Python que permite registrar conexiones entre nodos de una red de grafos,
-# almacenar la información en un archivo CSV y calcular la ruta más corta mediante el algoritmo de Dijkstra.
+# Descripción: Validación, lectura y escritura de conexiones.
 
-'''Validación y persistencia de conexiones en archivos CSV'''
+"""Validación y persistencia de conexiones en archivos CSV."""
 
 import os
+from typing import Callable
 import tempfile
 import csv
 import math
@@ -50,6 +50,20 @@ def validar_peso(entrada: str) -> float:
 def clave_conexion(origen: str, destino: str) -> tuple[str, str]:
     '''Genera una clave única para una conexión bidireccional'''
     return tuple(sorted((origen, destino)))
+
+
+def obtener_conexiones(
+    grafo: Grafo,
+) -> dict[tuple[str, str], float]:
+    """Obtiene las conexiones únicas del grafo en memoria."""
+    conexiones: dict[tuple[str, str], float] = {}
+
+    for origen, nodo in grafo.nodos.items():
+        for destino, peso in nodo.vecinos.items():
+            clave = clave_conexion(origen, destino)
+            conexiones[clave] = peso
+
+    return conexiones
 
 
 def solicitar_nodo(mensaje: str) -> str:
@@ -107,6 +121,7 @@ def guardar_conexion(
     destino: str,
     peso: float,
     ruta: Path = ARCHIVO_CSV,
+    grafo: Grafo | None = None,
 ) -> bool:
     '''Guarda una conexión nueva o actualiza su peso en el CSV'''
     origen = validar_nodo(origen)
@@ -127,7 +142,10 @@ def guardar_conexion(
             escritor.writerow([origen, destino, peso])
         return False
 
-    conexiones = leer_conexiones(ruta)
+    if grafo is None:
+        conexiones = leer_conexiones(ruta)
+    else:
+        conexiones = obtener_conexiones(grafo)
 
     if clave not in conexiones:
         with open(ruta, "a", newline="", encoding="utf-8") as archivo:
@@ -164,20 +182,22 @@ def guardar_conexion(
     return True
 
 
-def cargar_grafo(ruta: Path = ARCHIVO_CSV) -> Grafo:
-    '''Construye un grafo usando las conexiones válidas del CSV'''
+def cargar_grafo(
+    ruta: Path = ARCHIVO_CSV,
+    notificar: Callable[[str], None] = print,
+    estricto: bool = False,
+) -> Grafo:
+    """Construye un grafo usando las conexiones válidas del CSV."""
     grafo = Grafo()
 
     try:
         with open(ruta, "r", newline="", encoding="utf-8") as archivo:
             lector = csv.DictReader(archivo)
 
-            if lector.fieldnames is None:
-                raise KeyError("El archivo no contiene encabezados")
-
-            if not all(campo in lector.fieldnames
-                       for campo in ENCABEZADOS):
-                raise KeyError("Faltan encabezados requeridos en el CSV")
+            if lector.fieldnames != ENCABEZADOS:
+                raise KeyError(
+                    "El CSV tiene encabezados incorrectos"
+                )
 
             for numero_fila, fila in enumerate(lector, start=2):
                 try:
@@ -188,17 +208,21 @@ def cargar_grafo(ruta: Path = ARCHIVO_CSV) -> Grafo:
                     grafo.agregar_conexion(origen, destino, peso)
 
                 except (ValueError, KeyError, TypeError) as error:
-                    print(
+                    notificar(
                         f"Fila {numero_fila} omitida: {error}"
                     )
 
     except FileNotFoundError:
-        print("No existe nodos.csv, El grafo inicia vacío")
+        notificar("No existe nodos.csv. El grafo inicia vacío.")
 
     except KeyError as error:
-        print(f"Error en los encabezados: {error}")
+        if estricto:
+            raise
+        notificar(f"Error en los encabezados: {error}")
 
     except (OSError, UnicodeError, csv.Error) as error:
-        print(f"Error al leer el CSV: {error}")
+        if estricto:
+            raise
+        notificar(f"Error al leer el CSV: {error}")
 
     return grafo

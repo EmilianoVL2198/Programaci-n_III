@@ -1,11 +1,9 @@
-# Título: MetroGraph - Streamlit
-# Nombre: Emiliano Villalobos Luevano
+# Título: Motor lógico de MetroGraph
+# Nombre del autor: Emiliano Villalobos Luevano
 # Fecha: 15 de noviembre de 2026
-# Descripción: Programa modular desarrollado en Python que permite registrar conexiones entre nodos de una red de grafos,
-# almacenar la información en un archivo CSV y calcular la ruta más corta mediante el algoritmo de Dijkstra.
+# Descripción: Clases para gestionar grafos y ejecutar Dijkstra.
 
-
-'''Clases para representar un grafo y ejecutar Dijkstra'''
+"""Clases para representar grafos y calcular rutas óptimas."""
 
 import math
 
