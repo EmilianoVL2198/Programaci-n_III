@@ -1,0 +1,15 @@
+# Entornos virtuales
+.venv/
+venv/
+
+# Archivos temporales de Python
+__pycache__/
+*.pyc
+
+# Archivos temporales de SQLite
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Archivos del sistema operativo
+.DS_Store

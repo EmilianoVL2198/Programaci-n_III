@@ -1,0 +1,14 @@
+# Interfaz gráfica web
+streamlit==1.67.0
+
+# Procesamiento y representación tabular de datos
+pandas==3.1.1
+
+# Representación de grafos y redes
+networkx==3.7
+
+# Visualización gráfica de estaciones y conexiones
+matplotlib==3.11.2
+
+# Verificación de calidad y estilo del código
+flake8==7.5.0
