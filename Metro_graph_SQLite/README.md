@@ -1,6 +1,6 @@
-# 🚇 MetroGraph 2.0
+#  MetroGraph 2.0
 
-### Construye tu red. Encuentra tu camino.
+### Construyendo caminos hacia tu destino.
 
 ![Python](https://img.shields.io/badge/Python-3.12.9-3776AB?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-Frontend-FF4B4B?logo=streamlit&logoColor=white)
@@ -12,7 +12,7 @@
 
 MetroGraph es una aplicación web interactiva desarrollada en Python y Streamlit que permite construir, visualizar y optimizar redes de transporte personalizadas mediante la teoría de grafos y el algoritmo de Dijkstra.
 
-El proyecto surge de las actividades de Programación III. En esta versión sustituimos el almacenamiento mediante CSV por una base de datos relacional SQLite, conservando la interfaz y el algoritmo desarrollados anteriormente.
+El proyecto surge como plataforma para aplicar los conocimientos adquiridos durante el semestre en la materia de Programación III, culminando con esta versión final en la que migramos nuestros datos a una base de datos local.
 
 ## Evolución del proyecto
 
@@ -79,7 +79,12 @@ erDiagram
     }
 ```
 
-Los nombres de estaciones se almacenan una sola vez. Las conexiones hacen referencia a sus identificadores mediante llaves foráneas. Se aplican restricciones NOT NULL, UNIQUE y CHECK. Los identificadores se ordenan para representar cada conexión bidireccional una sola vez; UPSERT permite actualizar su peso sin duplicar registros. Las llaves foráneas se activan en cada conexión de Python.
+La lógica detrás del modelo relacional cumple con:
+-Los nombres de estaciones se almacenan una sola vez. 
+-Las conexiones hacen referencia a sus identificadores mediante llaves foráneas. 
+-Se aplican restricciones NOT NULL, UNIQUE y CHECK. 
+-Los identificadores se ordenan para representar cada conexión bidireccional una sola vez; UPSERT permite actualizar su peso sin duplicar registros. 
+-Las llaves foráneas se activan en cada conexión de Python.
 
 La siguiente consulta recupera los nombres de ambos extremos:
 
@@ -121,11 +126,11 @@ python -m pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Abrir la dirección local que indique Streamlit. No se necesita un servidor de base de datos externo. SQLite forma parte de la biblioteca estándar de Python.
+
 
 ## Gestión del estado
 
-La aplicación recupera el grafo y la tabla desde SQLite al iniciar la sesión y los conserva en `st.session_state`. Después de guardar una conexión, vuelve a cargar la red y actualiza la interfaz. Los cambios de sección y los cálculos de rutas reutilizan los datos en memoria sin consultar SQLite en cada interacción.
+La aplicación recupera el grafo y la tabla desde SQLite al iniciar la sesión y los conserva en `st.session_state`, después de guardar una conexión, vuelve a cargar la red y actualiza la interfaz, estos cambios de sección y los cálculos de rutas reutilizan los datos en memoria  RAM sin consultar una y otra vez SQLite.
 
 ## Inspección mediante DBeaver
 
@@ -149,7 +154,7 @@ La base entregada contiene 12 estaciones y 15 conexiones. Las capturas muestran 
 
 ### Constructor
 
-![Registro exitoso](evidencias/evidencias/constructor.png)
+![Registro exitoso](evidencias/constructor.png)
 
 ![Actualización](evidencias/actualizacion.png)
 
@@ -173,7 +178,7 @@ La base entregada contiene 12 estaciones y 15 conexiones. Las capturas muestran 
 
 ## Buenas prácticas y calidad de código
 
-Se utiliza programación orientada a objetos, modularización, type hints, docstrings, consultas parametrizadas y manejo de excepciones específicas. Los bloques try cuentan con al menos dos except. Los errores de persistencia se traducen a excepciones propias y la interfaz informa mediante alertas de Streamlit.
+Se utiliza programación orientada a objetos, modularización, type hints, docstrings, consultas parametrizadas y manejo de excepciones específicas, así como los bloques try cuentan con al menos dos except y para los errores de persistencia se traducen a excepciones propias y la interfaz informa mediante alertas de Streamlit.
 
 ```bash
 python -m flake8 app.py db_handler.py grafos.py
@@ -181,17 +186,19 @@ python -m flake8 app.py db_handler.py grafos.py
 
 ## Alcance actual y mejoras futuras
 
-MetroGraph administra una sola red editable de uso individual. No contempla sincronización en tiempo real entre usuarios, eliminación de estaciones o conexiones ni mapas geográficos reales. Como mejoras futuras se propone incorporar edición visual de nodos, administración de múltiples redes e importación y exportación de datos.
+MetroGraph administra una sola red editable de uso individual y local por lo cual no contempla sincronización en tiempo real entre usuarios, eliminación de estaciones o conexiones ni mapas geográficos reales. 
+
+Como mejoras futuras se propone incorporar edición visual de nodos (Usando arrastrar y en general interantuar con las graficas), administración de múltiples redes e importación y exportación de datos.
 
 ## Conclusión personal
 
-A lo largo de Programación III pude comprender de mejor manera cómo se desarrolla un proyecto de software y cómo puede evolucionar conforme se adquieren nuevos conocimientos. Comenzamos con estructuras de datos y algoritmos, incorporamos archivos CSV, desarrollamos una interfaz gráfica y finalmente implementamos una base de datos relacional.
+A lo largo de Programación III pude comprender de mejor manera cómo se desarrolla un proyecto de software y cómo puede evolucionar conforme se adquieren nuevos conocimientos, no fue necesario levantar en proyecto de una vez sino que comenzamos con estructuras de datos y algoritmos, incorporamos archivos CSV, desarrollamos una interfaz gráfica y finalmente implementamos una base de datos relacional.
 
-Uno de los aprendizajes más importantes fue entender que programar no consiste únicamente en conseguir que un código funcione, sino también en procurar que sea entendible, organizado y fácil de mantener. El uso de módulos, manejo de excepciones, validaciones y Flake8 me permitió identificar la importancia de las buenas prácticas.
+Uno de los aprendizajes más importantes fue entender que programar no consiste únicamente en conseguir que un código funcione, sino también en procurar que sea entendible, organizado y fácil de mantener, es por ello la necesidad del uso de las buenas prácticas y de algunas herramientas que nos compartió y los ayudaron a crear un producto de calidad.
 
-Lo que más me gustó fue trabajar sobre un mismo proyecto durante diferentes etapas y observar cómo una idea sencilla se convirtió en una aplicación más completa. También me pareció interesante utilizar GitHub. Lo que menos disfruté fue enfrentar algunos errores al integrar los componentes, aunque esos problemas me ayudaron a comprender mejor el código. Como mejora de la materia, propondría dedicar más tiempo a la integración y a ejercicios de depuración.
+Valoro mucho la iniciativa de enseñar programación tratando de quitarle la perte tecnica y más centrandose en que el aprendizaje prospere, motivarnos a utilizar tecnologías como GitHub o Dbeaver resulta muy útil para entender también la lógica del negocio y como será el campo laboral ahí fuera.
 
-Finalmente, MetroGraph representa buena parte de los conocimientos adquiridos durante el semestre. Me quedo con una mejor comprensión de Python, las estructuras de datos, las bases de datos y la manera en que estos conocimientos pueden combinarse para desarrollar una aplicación funcional.
+Finalmente, MetroGraph para mírepresenta buena parte de los conocimientos adquiridos durante el semestre, me quedo con una mejor comprensión de Python, las estructuras de datos, las bases de datos y la manera en que estos conocimientos pueden combinarse para desarrollar una aplicación funcional.
 
 ## Autor
 
